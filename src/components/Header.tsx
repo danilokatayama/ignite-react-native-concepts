@@ -1,11 +1,30 @@
-import React from 'react';
-import { View, Text, StatusBar, StyleSheet } from 'react-native';
+import React, {useState}from 'react';
+import { View, Text, StatusBar, StyleSheet, Switch } from 'react-native';
 
-export function Header() {
+interface Theme {
+  changeTheme(darkMode: boolean): void;
+  theme: any;
+}
+
+export function Header({changeTheme, theme}: Theme) {
+  const [darkMode, setDarkMode]= useState(false);
+
+  function toogleDarkMode(newValue: boolean) {
+    changeTheme(newValue);
+    setDarkMode(newValue);
+  }
+
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, {backgroundColor: theme.headerBackground}]}>
       <Text style={styles.headerText}>to.</Text>
       <Text style={[styles.headerText, { fontFamily: 'Poppins-SemiBold' }]}>do</Text>
+      <Switch
+        thumbColor="#fff"
+        style={styles.switch}
+        value={darkMode}
+        trackColor={{true: theme.container, false: '#9c9c9c'}}
+        onValueChange={() => toogleDarkMode(!darkMode)}
+      />
     </View>
   )
 }
@@ -14,7 +33,7 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: StatusBar.currentHeight,
     paddingBottom: 44,
-    backgroundColor: '#273FAD',
+    // backgroundColor: '#273FAD',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
@@ -23,5 +42,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#FFF',
     fontFamily: 'Poppins-Regular',
+  },
+  switch: {
+    position: 'absolute',
+    right: 10,
   }
 });
